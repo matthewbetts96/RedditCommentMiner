@@ -16,7 +16,7 @@ sql = sqlite3.connect('reddit_comments.db')
 cur = sql.cursor()
 print("Creating database if it doesn't exist")
 cur.execute('CREATE TABLE IF NOT EXISTS posts (COMMENTS varchar NOT NULL)')
-sql.commit
+sql.commit()
 
 print("Accessing account...")
 r = praw.Reddit(app_ua)
