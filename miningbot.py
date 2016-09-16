@@ -11,8 +11,6 @@ import time
 import sqlite3
 
 SUBREDDIT =  'all'
-unParsedComment = []
-committedComments = []
  
 print("Starting up Database")
 sql = sqlite3.connect('reddit_comments.db')
@@ -35,13 +33,8 @@ while (True):
     print("Adding comments...")
     for comment in praw.helpers.comment_stream(r, SUBREDDIT):
         text = comment.body
-        unParsedComment.append(text)
-        joinedComments = ''.join(map(str, unParsedComment))
-        if(text in committedComments) == False:
-            cur.execute('INSERT INTO posts VALUES (?)', (joinedComments,))
-            committedComments.append(joinedComments)
-            del unParsedComment[:]	
-            sql.commit() 
+        cur.execute('INSERT INTO posts VALUES (?)', (text))
+        sql.commit() 
         
 	
 	
