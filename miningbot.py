@@ -42,10 +42,7 @@ while (True):
             committedComments.append(joinedComments)
             del unParsedComment[:]	
             sql.commit() 
-        del unParsedComment[:]
-    print('Pulling new comments')
-    del unParsedComment[:]	
-    time.sleep(10)
+        
 	
 	
  
