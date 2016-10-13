@@ -10,12 +10,12 @@ import time
 import sqlite3
 
 SUBREDDIT =  'all'
- 
+
 print("Starting up Database")
-sql = sqlite3.connect('reddit_comments.db')
+sql = sqlite3.connect('TEST.db')
 cur = sql.cursor()
 print("Creating database if it doesn't exist")
-cur.execute('CREATE TABLE IF NOT EXISTS posts (COMMENTS varchar NOT NULL)')
+cur.execute('CREATE TABLE IF NOT EXISTS posts (BODY varchar NOT NULL, AUTHOR varchar NOT NULL, SUBREDDIT varchar NOT NULL, SUBREDDIT_ID varchar NOT NULL)')
 sql.commit()
 
 print("Accessing account...")
@@ -23,18 +23,19 @@ r = praw.Reddit(app_ua)
 r.set_oauth_app_info(app_id, app_secret, app_uri)
 r.refresh_access_information(app_refresh)
 print('Logged in.')
+
 while (True):
-    print("Fetching subreddit " + SUBREDDIT + "and comments.")
-    print("Adding comments...")
-    for comment in praw.helpers.comment_stream(r, SUBREDDIT):
-        text = comment.body
-        cur.execute('INSERT INTO posts VALUES (?)', (text))
-        sql.commit() 
-        
-	
-	
+	print("Fetching subreddit " + SUBREDDIT)
+	print("Fetching Comments...")
+	print("Adding comments...")
+	for comment in praw.helpers.comment_stream(r, SUBREDDIT):
+		commentbody = comment.body
+		commentAuthor = comment.author
+		commentSubreddit = comment.subreddit
+		commentSubredditID = comment.subreddit_id
+		cur.execute('INSERT INTO posts(BODY, AUTHOR, SUBREDDIT, SUBREDDIT_ID) VALUES (?,?,?,?)',(str(commentbody),str(commentAuthor),str(commentSubreddit),str(commentSubredditID),))
+		sql.commit()
  
-	
 		
 		
 
